@@ -1,1 +1,8 @@
-# TODO: настроить сбор метрик
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "devops-lab-service"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["app:8000"]
