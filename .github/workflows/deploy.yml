@@ -1,0 +1,27 @@
+name: Deploy to VM
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy application through SSH
+        run: |
+          ssh -o StrictHostKeyChecking=no qwestig@localhost << 'EOF'
+            cd ~/devops-lab-service
+            git pull
+            docker compose -f docker/docker-compose.yml up -d --build
+          EOF
+
+      - name: Check deployed service
+        run: |
+          sleep 10
+          curl http://localhost:8000
+          curl http://localhost:8000/tasks
+          curl http://localhost:8000/metrics
+
